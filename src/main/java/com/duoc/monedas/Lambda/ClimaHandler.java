@@ -23,8 +23,8 @@ public class ClimaHandler implements RequestHandler<APIGatewayProxyRequestEvent,
         for (int i = 0; i < ciudades.length; i++) {
             String ciudad = ciudades[i];
             try {
-                // Consultamos el formato plano para que Java lo procese de forma ultra rápida
-                URL url = new URL("https://wttr.in/" + ciudad + "?format=3");
+                // CAMBIO AQUÍ: Se agrega &m al final para forzar grados Celsius (°C)
+                URL url = new URL("https://wttr.in/" + ciudad + "?format=3&m");
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.setConnectTimeout(4000);
@@ -33,7 +33,7 @@ public class ClimaHandler implements RequestHandler<APIGatewayProxyRequestEvent,
                 String linea = in.readLine();
                 in.close();
 
-                // Limpiamos el nombre para que en el JSON se vea bonito (ej: Punta Arenas sin el guion bajo)
+                // Limpiamos el nombre para que en el JSON se vea bonito
                 jsonResultado.append("\"").append(ciudad.replace("_", " ")).append("\": \"").append(linea.trim()).append("\"");
             } catch (Exception e) {
                 jsonResultado.append("\"").append(ciudad.replace("_", " ")).append("\": \"No disponible temporalmente\"");
